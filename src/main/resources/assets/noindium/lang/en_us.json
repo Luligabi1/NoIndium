@@ -1,0 +1,4 @@
+{
+  "noindium.header": "Caution: Indium missing from game client",
+  "noindium.message": "Caution: One or more mods present in your game client might have issues caused by the use of the Sodium mod without Indium, ranging from minor visual artifacts to game crashes. Click on one of the buttons below to download Indium and avoid these issues and more:"
+}
