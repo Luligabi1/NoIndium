@@ -1,0 +1,12 @@
+{
+  "header.noindium.indium": "Aviso: Indium está ausente do seu cliente de Jogo",
+  "message.noindium.indium": "Aviso: Um ou mais mods presentes no seu cliente de Jogo podem ter problemas causados pelo uso do Mod Sodium sem Indium, desde pequenos artefatos visuais até mesmo crashes. Clique em um dos botões abaixo para baixar o Indium e evitar todos estes problemas:",
+
+  "header.noindium.optifabric": "Aviso: Optifabric presente no seu cliente de Jogo",
+  "message.noindium.optifabric": "Aviso: Um ou mais mods presentes no seu cliente de Jogo podem ter problemas causados pelo uso do Optifabric, desde pequenos artefatos visuais até mesmo crashes. É recomendado remover o mod para evitar estes problemas. Se você precisava do Optifine por algum motivo, cheque a Lista de Alternativos ao Optifne feita por LambdAurora:",
+
+  "label.noindium.open_mods_folder": "Abrir Pasta de Mods",
+  "label.noindium.optifine_alternatives": "Alternativas ao Optifine",
+
+  "label.noindium.proceed": "Continuar mesmo assim"
+}

@@ -2,7 +2,7 @@
   "header.noindium.indium": "Warning: Indium missing from game client",
   "message.noindium.indium": "Warning: One or more mods present in your game client might have issues caused by the use of the Sodium mod without Indium, ranging from minor visual artifacts to game crashes. Click on one of the buttons below to download Indium and avoid these issues and more:",
 
-  "header.noindium.optifabric": "Warning: Optifabric present",
+  "header.noindium.optifabric": "Warning: Optifabric present on game client",
   "message.noindium.optifabric": "Warning: One or more mods present in your game client might have issues caused by the use of Optifabric, ranging from minor visual artifacts to game crashes. It's recommended to remove the mod to avoid these issues and more. If you needed Optifine for one reason or another, check LambdAurora's Optifine Alternatives list:",
 
   "label.noindium.open_mods_folder": "Open Mods Folder",
