@@ -3,24 +3,20 @@
   "id": "noindium",
   "version": "${version}",
   "name": "No Indium?",
-  "description": "A small, jij-able mod atempting to minimize the usage of Sodium without Indium/Optifine on Fabric.",
+  "description": "A small, jij-able mod attempting to minimize the usage of Sodium without Indium on Fabric.",
   "authors": ["Luligabi"],
   "contact": {
-    "website": "dummy",
-    "repo": "dummy"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/no-indium",
+    "repo": "https://github.com/Luligabi1/NoIndium",
+    "issues": "https://github.com/Luligabi1/NoIndium/issues"
   },
   "license": "MIT",
   "icon": "assets/noindium/icon.png",
   "environment": "client",
-  "entrypoints": {
-    "client": ["me.luligabi.noindium.NoIndiumClient"]
-  },
-  "mixins": [
-    "noindium.mixins.json"
-  ],
+  "entrypoints": { "client": ["me.luligabi.noindium.NoIndium"] },
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "*"
+    "minecraft": ">=1.18.2"
   }
 }
