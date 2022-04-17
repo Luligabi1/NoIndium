@@ -1,11 +1,14 @@
 package me.luligabi.noindium;
 
+import me.luligabi.noindium.mixin.WarningScreenAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.font.MultilineText;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.WarningScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
@@ -32,14 +35,32 @@ public class NoIndiumWarningScreen extends WarningScreen {
             Util.getOperatingSystem().open(NoIndium.HAS_SODIUM ? "https://modrinth.com/mod/indium" : "https://lambdaurora.dev/optifine_alternatives/");
         }));
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, 130 + yOffset, 150, 20, new TranslatableText("label.noindium.proceed"), buttonWidget ->  {
-            /*if(this.checkbox.isChecked()) {
-                this.client.options.skipMultiplayerWarning = true;
-                this.client.options.write();
-            }*/
-            this.client.setScreen(new TitleScreen(false));
-        }));
+        if(NoIndium.CONFIG.allowToProceed) {
+            this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, 130 + yOffset, 150, 20, new TranslatableText("label.noindium.proceed"), buttonWidget ->  {
+                if(this.checkbox.isChecked()) {
+                    if(NoIndium.HAS_SODIUM) {
+                        NoIndium.CONFIG.showIndiumScreen = false;
+                    } else {
+                        NoIndium.CONFIG.showOptifabricScreen = false;
+                    }
+                    NoIndium.CONFIG.save();
+                }
+                this.client.setScreen(new TitleScreen(false));
+            }));
+        }
     }
+
+    @Override
+    protected void init() {
+        ((WarningScreenAccessor) this).setMessageText(MultilineText.create(textRenderer, MESSAGE, width - 50));
+        int yOffset = (((WarningScreenAccessor) this).getMessageText().count() + 1) * textRenderer.fontHeight * 2 - 20;
+        if(NoIndium.CONFIG.allowToProceed) {
+            checkbox = new CheckboxWidget(width / 2 - 155 + 80, 76 + yOffset, 150, 20, CHECK_MESSAGE, false);
+            addDrawableChild(checkbox);
+        }
+        initButtons(yOffset);
+    }
+
 
     @Override
     public boolean shouldCloseOnEsc() {

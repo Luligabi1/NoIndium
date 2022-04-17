@@ -1,5 +1,6 @@
 package me.luligabi.noindium;
 
+import draylar.omegaconfig.OmegaConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,7 +14,7 @@ public class NoIndium implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            if(HAS_SODIUM || HAS_OPTIFABRIC) {
+            if((HAS_SODIUM && CONFIG.showIndiumScreen) || (HAS_OPTIFABRIC && CONFIG.showOptifabricScreen)) {
                 MinecraftClient.getInstance().setScreen(new NoIndiumWarningScreen());
             }
         });
@@ -21,5 +22,7 @@ public class NoIndium implements ClientModInitializer {
 
     public static final boolean HAS_SODIUM = (FabricLoader.getInstance().isModLoaded("sodium") && !FabricLoader.getInstance().isModLoaded("indium"));
     public static final boolean HAS_OPTIFABRIC = FabricLoader.getInstance().isModLoaded("optifabric");
+
+    public static final ModConfig CONFIG = OmegaConfig.register(ModConfig.class);
 
 }
