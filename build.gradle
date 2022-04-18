@@ -27,7 +27,7 @@ def RELEASE_FILE = "${buildDir}/libs/${archivesBaseName}-${version}.jar"
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def getChangeLog() {
-    return "Initial release"
+    return ""
 }
 
 repositories {
@@ -136,13 +136,6 @@ curseforge {
             displayName = RELEASE_NAME
             relations {
                 requiredDependency 'fabric-api'
-                requiredDependency 'terrablender-fabric'
-                requiredDependency 'patchouli-fabric'
-
-                embeddedLibrary 'omega-config'
-                embeddedLibrary 'fabric-shield-lib'
-
-                optionalDependency 'roughly-enough-items'
             }
         }
 
