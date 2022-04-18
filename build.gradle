@@ -1,10 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:${project.proguard_version}") {
+            exclude(group: "com.android.tools.build")
+        }
+    }
+}
+
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
+    id "com.matthewprenger.cursegradle" version '1.4.0'
+    id "com.modrinth.minotaur" version '1.2.1'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 version = project.mod_version
 group = project.maven_group
+
+def ENV = System.getenv()
+
+def RELEASE_NAME = "[${project.minecraft_version}] ${version}"
+def RELEASE_FILE = "${buildDir}/libs/${archivesBaseName}-${version}.jar"
+
+@SuppressWarnings('GrMethodMayBeStatic')
+def getChangeLog() {
+    return "Initial release"
+}
 
 repositories {
     maven { url "https://maven.shedaniel.me/" }
@@ -61,19 +85,125 @@ jar {
     }
 }
 
+shadowJar {
+    archiveClassifier.set("shadowed")
+    configurations = [project.configurations.shadow]
+}
+
+//noinspection UnnecessaryQualifiedReference
+task proguardJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
+
+    Map<String, String> MODULE_INFO_CLASS_FILTER = new HashMap<String, String>(1) {{ put("filter", "!module-info.class") }}
+
+    // NOTE: The "code/allocation/variable" optimisation (see: https://www.guardsquare.com/manual/configuration/optimizations) breaks remapJar.
+    configuration("proguard-rules.pro")
+
+    libraryjars(
+            new HashMap<String, String>(2) {{
+                putAll(MODULE_INFO_CLASS_FILTER)
+                put("jarfilter", "!**.jar")
+            }},
+            fileTree("${System.getenv("JAVA_HOME")}/jmods").matching { include("java.base.jmod") }.getSingleFile()
+    )
+    libraryjars(MODULE_INFO_CLASS_FILTER, project.configurations.runtimeClasspath )
+
+    File shadowedJar = shadowJar.archiveFile.get().asFile
+    injars(shadowedJar)
+    outjars("${buildDir}/tmp/${shadowedJar.getName()}")
+}
+
+prepareRemapJar {
+    dependsOn(proguardJar)
+}
+
+remapJar {
+    inputFile.set(proguardJar.outJarFileCollection.singleFile)
+}
+
+curseforge {
+    if (ENV.CURSEFORGE_API_KEY) {
+        apiKey = ENV.CURSEFORGE_API_KEY
+    }
+
+    project {
+        id = project.curseforge_id
+        changelog = getChangeLog()
+        releaseType = "release"
+        addGameVersion project.minecraft_version
+        addGameVersion "Fabric"
+
+        mainArtifact(file(RELEASE_FILE)) {
+            displayName = RELEASE_NAME
+            relations {
+                requiredDependency 'fabric-api'
+                requiredDependency 'terrablender-fabric'
+                requiredDependency 'patchouli-fabric'
+
+                embeddedLibrary 'omega-config'
+                embeddedLibrary 'fabric-shield-lib'
+
+                optionalDependency 'roughly-enough-items'
+            }
+        }
+
+        afterEvaluate {
+            uploadTask.dependsOn("remapJar")
+        }
+    }
+
+    options {
+        forgeGradleIntegration = false
+    }
+}
+
+//Modrinth publishing
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.request.VersionType
+
+task modrinth(type: TaskModrinthUpload, dependsOn: remapJar, group: "upload") {
+    onlyIf {
+        ENV.MODRINTH_TOKEN
+    }
+    token = ENV.MODRINTH_TOKEN
+
+    projectId = project.modrinth_id
+    changelog = getChangeLog()
+
+    versionNumber = version
+    versionName = RELEASE_NAME
+    versionType = VersionType.valueOf("RELEASE")
+
+    uploadFile = file(RELEASE_FILE)
+
+    addGameVersion(project.minecraft_version as String)
+    addLoader("fabric")
+}
+
 // configure the maven publication
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            url "https://maven.cafeteria.dev/releases"
+            credentials {
+                username = System.getenv().mcdUsername
+                password = System.getenv().mcdPassword
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
     }
 }
