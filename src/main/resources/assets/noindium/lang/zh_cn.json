@@ -1,0 +1,12 @@
+{
+  "header.noindium.indium": "警告: 客户端未找到铟",
+  "message.noindium.indium": "警告: 在你的游戏客户端中存在的一个或多个模组可能会因为使用没有安装铟的钠而产生问题，从轻微的视觉错误到游戏崩溃不等。点击以下一个按钮下载Indium以避免这些问题：",
+
+  "header.noindium.optifabric": "警告: 客户端检测到 OptiFabric",
+  "message.noindium.optifabric": "警告: 在你的游戏客户端中存在的一个或多个模组可能会因为使用 OptiFabric 而产生问题，从轻微的视觉错误到游戏崩溃不等。建议删除该模组以避免这些问题。如果你因为某种原因需要 OptiFine，请查看 LambdAurora 的 Optifine 替代品列表：",
+
+  "label.noindium.open_mods_folder": "打开模组文件夹",
+  "label.noindium.optifine_alternatives": "OptiFine 替代品",
+
+  "label.noindium.proceed": "无论如何都要确定"
+}
