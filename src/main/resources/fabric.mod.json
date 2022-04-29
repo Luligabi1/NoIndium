@@ -5,6 +5,7 @@
   "name": "No Indium?",
   "description": "A small, jij-able mod attempting to minimize the usage of Sodium without Indium on Fabric.",
   "authors": ["Luligabi"],
+  "contributors": ["Felix14-v2", "pkstDev"],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/no-indium",
     "repo": "https://github.com/Luligabi1/NoIndium",
