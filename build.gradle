@@ -13,7 +13,7 @@ plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
     id "com.matthewprenger.cursegradle" version '1.4.0'
-    id "com.modrinth.minotaur" version '1.2.1'
+    id "com.modrinth.minotaur" version '2.3.1'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
@@ -22,12 +22,12 @@ group = project.maven_group
 
 def ENV = System.getenv()
 
-def RELEASE_NAME = "[${project.minecraft_version}] ${version}"
-def RELEASE_FILE = "${buildDir}/libs/${archivesBaseName}-${version}.jar"
+def RELEASE_NAME = "${version}"
+def RELEASE_FILE = "${buildDir}/tmp/${archivesBaseName}-${version}-shadowed.jar"
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def getChangeLog() {
-    return ""
+    return "- Updated to 1.19;\n- Removed Omega Config dependency."
 }
 
 repositories {
@@ -41,9 +41,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    modImplementation "com.github.Draylar.omega-config:omega-config-base:${project.omega_config_version}"
-    include "com.github.Draylar.omega-config:omega-config-base:${project.omega_config_version}"
 }
 
 processResources {
@@ -57,10 +54,6 @@ processResources {
 
 def targetJavaVersion = 17
 tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         it.options.release = targetJavaVersion
@@ -73,9 +66,6 @@ java {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
     archivesBaseName = project.archives_base_name
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
 }
 
@@ -150,26 +140,20 @@ curseforge {
 }
 
 //Modrinth publishing
-import com.modrinth.minotaur.TaskModrinthUpload
-import com.modrinth.minotaur.request.VersionType
-
-task modrinth(type: TaskModrinthUpload, dependsOn: remapJar, group: "upload") {
-    onlyIf {
-        ENV.MODRINTH_TOKEN
+modrinth {
+    if (ENV.MODRINTH_TOKEN) {
+        token = ENV.MODRINTH_TOKEN
     }
-    token = ENV.MODRINTH_TOKEN
-
     projectId = project.modrinth_id
-    changelog = getChangeLog()
+    versionNumber = project.mod_version
+    uploadFile = remapJar
+    gameVersions = [project.minecraft_version]
+    loaders = ['fabric']
+    versionType = "release"
 
-    versionNumber = version
-    versionName = RELEASE_NAME
-    versionType = VersionType.valueOf("RELEASE")
-
-    uploadFile = file(RELEASE_FILE)
-
-    addGameVersion(project.minecraft_version as String)
-    addLoader("fabric")
+    dependencies {
+        required.project("fabric-api")
+    }
 }
 
 // configure the maven publication
