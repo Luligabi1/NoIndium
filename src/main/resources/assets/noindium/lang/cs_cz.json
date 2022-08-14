@@ -1,0 +1,12 @@
+{
+  "header.noindium.indium": "Varování: Herní klient postrádá Indium",
+  "message.noindium.indium": "Varování: Jeden, nebo více z modifikací vaší hry by mohl mít problémy, způsobené použitím modu Sodium bez modu Indium. Tyto problémy jsou od malých vizuálních artefaktů, po havárii hry. Klikněte na jedno z těchto tlačítek, abyste stáhli Indium a vyhnuli se těmto i dalším závadám:",
+
+  "header.noindium.optifabric": "Varování: Optifabric přítomný v herním klientu",
+  "message.noindium.optifabric": "Varování: Jeden, nebo více z modifikací vaší hry by mohl mít problémy, způsobené použitím modu Optifabric. Tyto problémy jsou od malých vizuálních artefaktů, po havárii hry. Je doporučené vyhnout se těmto i dalším problémům. Pokud z nějakého důvodu potřebujete Optifine, podívejte se na list LambdAuroryných Optifine Alternativ:",
+
+  "label.noindium.open_mods_folder": "Otevřít složku modifikací",
+  "label.noindium.optifine_alternatives": "Optifine Alternativy",
+
+  "label.noindium.proceed": "Přesto pokračovat"
+}
