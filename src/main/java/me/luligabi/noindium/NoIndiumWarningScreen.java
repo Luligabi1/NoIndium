@@ -27,27 +27,39 @@ public class NoIndiumWarningScreen extends WarningScreen {
 
     @Override
     protected void initButtons(int yOffset) {
-        addDrawableChild(new ButtonWidget(width / 2 - 155, 100 + yOffset, 150, 20, NoIndium.HAS_SODIUM ? CURSEFORGE : OPEN_MODS_FOLDER, buttonWidget ->  {
-            if(NoIndium.HAS_SODIUM) Util.getOperatingSystem().open("https://www.curseforge.com/minecraft/mc-mods/indium");
-            else Util.getOperatingSystem().open(new File(FabricLoader.getInstance().getGameDir().toFile(), "mods"));
-        }));
+        addDrawableChild(
+                ButtonWidget.builder(NoIndium.HAS_SODIUM ? CURSEFORGE : OPEN_MODS_FOLDER, buttonWidget ->  {
+                    if(NoIndium.HAS_SODIUM) Util.getOperatingSystem().open("https://www.curseforge.com/minecraft/mc-mods/indium");
+                    else Util.getOperatingSystem().open(new File(FabricLoader.getInstance().getGameDir().toFile(), "mods"));
+                })
+                .dimensions(width / 2 - 155, 100 + yOffset, 150, 20)
+                .build()
+        );
 
-        addDrawableChild(new ButtonWidget(width / 2 - 155 + 160, 100 + yOffset, 150, 20, NoIndium.HAS_SODIUM ? MODRINTH : OPTIFINE_ALTERNATIVES, buttonWidget ->  {
-            Util.getOperatingSystem().open(NoIndium.HAS_SODIUM ? "https://modrinth.com/mod/indium" : "https://lambdaurora.dev/optifine_alternatives/");
-        }));
+        addDrawableChild(
+                ButtonWidget.builder(NoIndium.HAS_SODIUM ? MODRINTH : OPTIFINE_ALTERNATIVES, buttonWidget ->  {
+                    Util.getOperatingSystem().open(NoIndium.HAS_SODIUM ? "https://modrinth.com/mod/indium" : "https://lambdaurora.dev/optifine_alternatives/");
+                })
+                .dimensions(width / 2 - 155 + 160, 100 + yOffset, 150, 20)
+                .build()
+        );
 
         if(NoIndium.CONFIG.allowToProceed) {
-            addDrawableChild(new ButtonWidget(width / 2 - 75, 130 + yOffset, 150, 20, Text.translatable("label.noindium.proceed"), buttonWidget ->  {
-                if(checkbox.isChecked()) {
-                    if(NoIndium.HAS_SODIUM) {
-                        NoIndium.CONFIG.showIndiumScreen = false;
-                    } else {
-                        NoIndium.CONFIG.showOptifabricScreen = false;
+            addDrawableChild(
+                ButtonWidget.builder(Text.translatable("label.noindium.proceed"), buttonWidget ->  {
+                    if(checkbox.isChecked()) {
+                        if(NoIndium.HAS_SODIUM) {
+                            NoIndium.CONFIG.showIndiumScreen = false;
+                        } else {
+                            NoIndium.CONFIG.showOptifabricScreen = false;
+                        }
+                        NoIndium.saveConfig(NoIndium.CONFIG);
                     }
-                    NoIndium.saveConfig(NoIndium.CONFIG);
-                }
-                client.setScreen(new TitleScreen(false));
-            }));
+                    client.setScreen(new TitleScreen(false));
+                })
+                .dimensions(width / 2 - 75, 130 + yOffset, 150, 20)
+                .build()
+            );
         }
     }
 
