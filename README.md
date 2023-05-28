@@ -26,4 +26,4 @@ dependencies {
 }
 ```
 
-You may check the mod's current version on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/no-indium/files), [Modrinth](https://modrinth.com/mod/no-indium/versions) or [Github](https://github.com/Luligabi1/NoIndium/blob/1.19/gradle.properties#L9).
+You may check the mod's current version on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/no-indium/files), [Modrinth](https://modrinth.com/mod/no-indium/versions) or [Github](https://github.com/Luligabi1/NoIndium/blob/1.20/gradle.properties#L9).
