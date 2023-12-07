@@ -6,8 +6,8 @@ import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +21,12 @@ public class NoIndium implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            if((HAS_SODIUM && CONFIG.showIndiumScreen) || (HAS_OPTIFABRIC && CONFIG.showOptifabricScreen)) {
-                client.setScreen(new NoIndiumWarningScreen());
-            }
-        });
+    }
+
+    public static void openWarningScreen(MinecraftClient client) {
+        if((HAS_SODIUM && CONFIG.showIndiumScreen) || (HAS_OPTIFABRIC && CONFIG.showOptifabricScreen)) {
+            client.setScreen(new NoIndiumWarningScreen());
+        }
     }
 
 
@@ -87,7 +88,7 @@ public class NoIndium implements ClientModInitializer {
         HAS_SODIUM = (FabricLoader.getInstance().isModLoaded("sodium") && !FabricLoader.getInstance().isModLoaded("indium"));
         HAS_OPTIFABRIC = FabricLoader.getInstance().isModLoaded("optifabric");
 
-        LOGGER = LoggerFactory.getLogger("No Indium?");;
+        LOGGER = LoggerFactory.getLogger("No Indium?");
 
         GSON = new GsonBuilder().setPrettyPrinting().create();
         CONFIG_FILE = new File(String.format("%s%snoindium.json", FabricLoader.getInstance().getConfigDir(), File.separator));

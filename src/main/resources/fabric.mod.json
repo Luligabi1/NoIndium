@@ -17,7 +17,7 @@
   "entrypoints": { "client": ["me.luligabi.noindium.NoIndium"] },
   "mixins": ["noindium.mixins.json"],
   "depends": {
-    "minecraft": ">=1.20-beta.1",
+    "minecraft": ">=1.20.4-beta.1",
     "fabricloader": "*",
     "fabric": "*"
   }

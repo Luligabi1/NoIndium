@@ -24,7 +24,6 @@ public class NoIndiumWarningScreen extends WarningScreen {
         super(HEADER, MESSAGE, CHECK_MESSAGE, NARRATED_TEXT);
     }
 
-
     @Override
     protected void initButtons(int yOffset) {
         addDrawableChild(
@@ -68,7 +67,10 @@ public class NoIndiumWarningScreen extends WarningScreen {
         ((WarningScreenAccessor) this).setMessageText(MultilineText.create(textRenderer, MESSAGE, width - 50));
         int yOffset = (((WarningScreenAccessor) this).getMessageText().count() + 1) * textRenderer.fontHeight * 2 - 20;
         if(NoIndium.CONFIG.allowToProceed) {
-            checkbox = new CheckboxWidget(width / 2 - 155 + 80, 76 + yOffset, 150, 20, CHECK_MESSAGE, false);
+            checkbox = CheckboxWidget.builder(CHECK_MESSAGE, textRenderer)
+            .pos(width / 2 - 155 + 80, 76 + yOffset)
+            .build();
+
             addDrawableChild(checkbox);
         }
         initButtons(yOffset);
